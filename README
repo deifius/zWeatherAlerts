@@ -1,0 +1,13 @@
+This script will vocally alert you when NOAA issues weather warnings in your neighborhood.
+
+you'll need to configure the samecodes.txt, change the name of the location to your location and visit:
+
+http://www.nws.noaa.gov/nwr/coverage/county_coverage.html
+
+to find the same code of your neighborhood.
+
+todo: 
+  automate the location figuring
+  refine the voice
+  port to windows
+  make a RaspberryPi.0.W system out of this, with a big button on top.
