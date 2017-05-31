@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 from weatheralerts import WeatherAlerts
-import json, talkey, sys, select, os
+import json, talkey, sys, select, os, pdb, datetime
 from time import sleep
 
 
 def WeatherIsBad(currentAlerts):
     # festvox or soundfile
     # method for ACKING, like press 1 or some such
+    pdb.set_trace()
     tts = talkey.Talkey()
     while True:
         os.system('clear')
@@ -35,6 +36,8 @@ def checkTheWeather():
 
 while True:
     currentAlerts = checkTheWeather()
+    namePlace = json.loads(open('samecodes.txt').read())['name']
+    timeNow = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     if currentAlerts != []: WeatherIsBad(currentAlerts)
-    else: print('all OK!')
+    else: print('all OK in ' + namePlace + " at " + timeNow)
     sleep(300)
