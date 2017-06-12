@@ -8,7 +8,6 @@ from time import sleep
 def WeatherIsBad(currentAlerts):
     # festvox or soundfile
     # method for ACKING, like press 1 or some such
-    pdb.set_trace()
     tts = talkey.Talkey()
     while True:
         os.system('clear')
