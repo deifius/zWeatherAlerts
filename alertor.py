@@ -28,6 +28,15 @@ def k_nearest_neighbor(locationA, fc_zone_stats, k):
 	distances.sort()
 	return distances[0:k]
 
+def convert_forecast_zone_to_URL(stat_entry):
+	code = f'{stat_entry[1]}C{stat_entry[7][2:]}'
+	return f'https://alerts.weather.gov/cap/wwaatmget.php?x={code}&y=0  > forecasts/{code}'
+
+def pull_noaa_alerts_by_forecast_zone(location, k):
+	this = k_nearest_neighbor(location, eat_Forecast_Zones(), k)
+	for each in this:
+		os.system(f'curl {convert_forecast_zone_to_URL(each)}')
+
 def checkTheWeather(**whereAmI):
 	# read samecodes every time and grab any alerts from NOAA
 	# if weather is bad and unACKED call ifWeatherIsBad
