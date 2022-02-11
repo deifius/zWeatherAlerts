@@ -3,7 +3,7 @@
 from weatheralerts import WeatherAlerts
 import json, sys, select, os, pdb, datetime
 from time import sleep
-
+from math import sqrt
 
 """weatheralerts is throwing errors,
 I've found noaa provided rest interface:
@@ -16,11 +16,17 @@ def eat_Forecast_Zones():
 	with open('ForecastZoneGeoLoc.txt') as stuff:  stats = stuff.read().split('\n')
 	for each_stat in enumerate(stats):
 		stats[each_stat[0]] = each_stat[1].split('|')
+	while stats[-1] == [""]: stats.pop()
 	return stats
 
 def euclid_distance(point1, point2):
-	try: return sqrt((point1[0]-point2[0])**2+(point1[1]-point2[1])**2)
-	except: print('points not formatted correctly?')
+	try: return sqrt((float(point1[0])-float(point2[0]))**2+(float(point1[1])-float(point2[1]))**2)
+	except: print(f'points not formatted correctly?')
+
+def k_nearest_neighbor(locationA, fc_zone_stats, k):
+	distances = [[euclid_distance(locationA, that[-2:])]+that for that in fc_zone_stats]
+	distances.sort()
+	return distances[0:k]
 
 def checkTheWeather(**whereAmI):
 	# read samecodes every time and grab any alerts from NOAA
