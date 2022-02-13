@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 from weatheralerts import WeatherAlerts
-import json, sys, select, os, pdb, datetime
+import json, sys, select, os, pdb, datetime, xmltodict
 from time import sleep
 from math import sqrt
+from subprocess import check_output
+
 
 """weatheralerts is throwing errors,
 I've found noaa provided rest interface:
@@ -30,12 +32,19 @@ def k_nearest_neighbor(locationA, fc_zone_stats, k):
 
 def convert_forecast_zone_to_URL(stat_entry):
 	code = f'{stat_entry[1]}C{stat_entry[7][2:]}'
-	return f'https://alerts.weather.gov/cap/wwaatmget.php?x={code}&y=0  > forecasts/{code}'
+	return f'https://alerts.weather.gov/cap/wwaatmget.php?x={code}&y=0'
 
 def pull_noaa_alerts_by_forecast_zone(location, k):
 	this = k_nearest_neighbor(location, eat_Forecast_Zones(), k)
-	for each in this:
-		os.system(f'curl {convert_forecast_zone_to_URL(each)}')
+	alerts = [xmltodict.parse(check_output(['curl', f'{convert_forecast_zone_to_URL(each)}'])) for each in this]
+	#print(f"{whee['feed']['entry']['title']}: last update {whee['feed']['entry']['updated']}")
+	return alerts
+
+def present_alerts_in_txt(location, k):
+	that = pull_noaa_alerts_by_forecast_zone(location, k)
+	for whee in that:
+		print(f"""{whee['feed']['title']}:
+		{whee['feed']['entry']['title']}: last update {whee['feed']['entry']['updated']}""")
 
 def checkTheWeather(**whereAmI):
 	# read samecodes every time and grab any alerts from NOAA
