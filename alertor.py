@@ -31,7 +31,6 @@ def euclidean_distance(*args):
 	if len(locA) != len(locB): return "dimensions of points need to be equal"
 	return sqrt(sum([(locA[x]-locB[x])**2 for x in range(len(locA))]))
 
-
 def k_nearest_neighbor(locationA, fc_zone_stats, k):
 	distances = [[pythagorean_distance(locationA, that[-2:])]+that for that in fc_zone_stats]
 	distances.sort()
@@ -46,6 +45,13 @@ def pull_noaa_alerts_by_forecast_zone(location, k):
 	alerts = [xmltodict.parse(check_output(['curl', f'{convert_forecast_zone_to_URL(each)}'])) for each in this]
 	#print(f"{whee['feed']['entry']['title']}: last update {whee['feed']['entry']['updated']}")
 	return alerts
+
+boulder = [40.015, -105.2705]
+chicago = [41.8781, -87.6298]
+traverse = [44.7631, -85.6206]
+newyork = [40.7128, -74.0060]
+seattle = [47.6062, -122.3321]
+calgary = [51.0447, -114.0719]
 
 def present_alerts_in_txt(location, k):
 	that = pull_noaa_alerts_by_forecast_zone(location, k)
