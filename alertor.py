@@ -21,12 +21,19 @@ def eat_Forecast_Zones():
 	while stats[-1] == [""]: stats.pop()
 	return stats
 
-def euclid_distance(point1, point2):
+def pythagorean_distance(point1, point2):
 	try: return sqrt((float(point1[0])-float(point2[0]))**2+(float(point1[1])-float(point2[1]))**2)
 	except: print(f'points not formatted correctly?')
 
+def euclidean_distance(*args):
+	try: locA, locB = args
+	except: return "2 locations plz"
+	if len(locA) != len(locB): return "dimensions of points need to be equal"
+	return sqrt(sum([(locA[x]-locB[x])**2 for x in range(len(locA))]))
+
+
 def k_nearest_neighbor(locationA, fc_zone_stats, k):
-	distances = [[euclid_distance(locationA, that[-2:])]+that for that in fc_zone_stats]
+	distances = [[pythagorean_distance(locationA, that[-2:])]+that for that in fc_zone_stats]
 	distances.sort()
 	return distances[0:k]
 
